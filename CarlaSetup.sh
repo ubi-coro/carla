@@ -82,6 +82,25 @@ else
         Carla
 fi
 
+# -- GIT LFS SETUP AND PULL --
+if ! command -v git-lfs &> /dev/null; then
+    echo "git-lfs not found, installing locally..."
+    mkdir -p "$HOME/.local/bin"
+    wget -q https://github.com/git-lfs/git-lfs/releases/latest/download/git-lfs-linux-amd64-v3.7.0.tar.gz -O /tmp/git-lfs.tar.gz
+    tar -xf /tmp/git-lfs.tar.gz -C /tmp/
+    cp /tmp/git-lfs-*/git-lfs "$HOME/.local/bin/"
+    export PATH="$HOME/.local/bin:$PATH"
+    echo "export PATH=\"$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
+    echo "git-lfs installed locally."
+fi
+
+cd "$workspace_path/Unreal/CarlaUnreal/Content/Carla"
+git lfs install
+echo "Pulling LFS assets... this might take a while."
+git lfs pull
+echo "Git LFS assets pulled successfully."
+cd "$workspace_path"
+
 # -- DOWNLOAD + BUILD UNREAL ENGINE --
 if [ ! -z $CARLA_UNREAL_ENGINE_PATH ] && [ -d $CARLA_UNREAL_ENGINE_PATH ]; then
     echo "Found CARLA Unreal Engine at $CARLA_UNREAL_ENGINE_PATH"
