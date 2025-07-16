@@ -44,19 +44,6 @@ while true; do
     esac
 done
 
-# Check for root privileges:
-if [ -z "$EUID" ]; then
-    EUID=$(id -u)
-fi
-if [ "$EUID" -ne 0 ]; then
-    if [ $interactive -eq 0 ]; then
-        if [ $skip_prerequisites -eq 0 ]; then
-            echo "Please run this script as root. Otherwise pass --interactive to be prompted whenever root privileges or Git credentials are needed."
-            exit 1
-        fi
-    fi
-fi
-
 # Check for Git credentials:
 if [ -z "$GIT_LOCAL_CREDENTIALS" ]; then
     if [ $interactive -eq 1 ]; then
@@ -76,7 +63,7 @@ if [ $skip_prerequisites -eq 0 ]; then
         python_path=${python_root}/python3
     fi
     echo "Installing prerequisites..."
-    sudo -E bash -x Util/SetupUtils/InstallPrerequisites.sh --python-path=$python_path
+    bash -x Util/SetupUtils/InstallPrerequisites.sh --python-path=$python_path
 else
     echo "Skipping prerequisites install step."
 fi
