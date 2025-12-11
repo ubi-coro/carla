@@ -1,7 +1,5 @@
 #! /bin/bash
 
-set -e
-
 interactive=0
 skip_prerequisites=0
 launch=0
